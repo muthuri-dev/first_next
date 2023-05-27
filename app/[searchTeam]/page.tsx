@@ -7,6 +7,22 @@ type TProps = {
   };
 };
 
+export async function generateMetadate({ params: { searchTearm } }: TProps) {
+  const wikiData: Promise<TSearchResult> = getwikiResults(searchTearm);
+  const data = await wikiData;
+  const displayTerm = searchTearm.replaceAll('%20', ' ');
+
+  if(!data?.query?.pages){
+    return{
+        title:`${displayTerm} Not Found`
+    }
+  }
+  return{
+    title:displayTerm,
+    description:`Search results for ${displayTerm}`
+  }
+}
+
 export default async function searchResults({
   params: { searchTearm },
 }: TProps) {
